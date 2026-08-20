@@ -6,26 +6,20 @@ An open-source, 6-DOF robotic arm featuring a custom mixed-architecture control 
 
 ## Hardware Overview
 
-### Physical Structure
-*(Mechanical design, joint assembly, and motor mounting.)*
+### Mechanical
+The physical structure consists of 3D printed 6 axis robotic arm with one meter span. Joints are driven with Nema stepper motors through gear ratios and pulleys, controlling rotation and movement of arm. Motors are to be guided through sensor inputs (limit switches, MT6701) and controlled via Nema Stepper Motors and precise gear ratios.
 <p align="center">
   <img src="docs/robotic-arm.jpg" alt="Physical Arm Structure" width="600"/>
 </p>
 
-### The Control Board (Physical PCB)
-*(Custom board featuring 24V/5V/3.3V power distribution, stepper drivers, and I/O.)*
+### Electrical
+Electronics consist of a power supply unit (connected to a wall outlet) sent to a custom PCB that actively controls the robotic arm through signals to the stepper motors and data from encoders and limit switches mounted on the stepper motors on the arm.
 <p align="center">
   <img src="docs/arm-pcb.jpg" alt="Assembled PCB" width="600"/>
 </p>
 
-### Schematic
-*(Designed in KiCad. Handles logic shifting via 74HCT245, limit switch & encoder monitoring, and I2C multiplexing.)*
-<p align="center">
-  <img src="docs/images/schematic.png" alt="PCB Schematic" width="600"/>
-</p>
-
-### PCB Layout
-*(Houses pin headers for reusability of all boards, thermal reliefs on 24V power pours, decoupling, and pull-up resistors.)*
+#### PCB Layout
+The printed circuit board handles logic shifting via 74HCT245, limit switch & encoder monitoring, and I2C multiplexing. Houses pin headers for reusability of all boards, thermal reliefs on 24V power pours, decoupling, and pull-up resistors.
 <p align="center">
   <img src="docs/pcb-layout.png" alt="PCB Layout" width="600"/>
 </p>
