@@ -1,7 +1,29 @@
 <?xml version="1.0"?>
-<robot xmlns:xacro="http://www.ros.org/wiki/xacro"  name="robot">
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro"  name="robotic-arm">
 
-    <!-- Example link -->
-    <link name="base_link"></link>
+    <xacro:include filename="robot_core.xacro" />
+    <xacro:include filename="ros2_control.xacro" />
 
 </robot>
+
+<!-- 
+terminal 1 (delete space between dashes before symlink):
+source ~/.bashrc
+source ~/ra_ws/install/setup.bash
+ros2 daemon stop
+ros2 daemon start
+colcon build - -symlink-install
+ros2 launch my_bot rsp.launch.py 
+
+terminal 2:
+source ~/ra_ws/install/setup.bash
+rviz2
+
+terminal 3:
+ros2 run joint_state_publisher_gui joint_state_publisher_gui
+
+diagnostics:
+ros2 node list
+ros2 topic list
+ros2 topic echo /tf_static
+-->

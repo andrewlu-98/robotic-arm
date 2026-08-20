@@ -4,7 +4,9 @@ from ament_index_python.packages import get_package_share_directory
 
 from launch import LaunchDescription
 from launch.substitutions import LaunchConfiguration
-from launch.actions import DeclareLaunchArgument
+from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription, ExecuteProcess, RegisterEventHandler
+from launch.event_handlers import OnProcessExit
+from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch_ros.actions import Node
 
 import xacro
@@ -29,13 +31,50 @@ def generate_launch_description():
         parameters=[params]
     )
 
+    # Gazebo Sim
+    gazebo = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(
+            os.path.join(get_package_share_directory('ros_gz_sim'), 'launch', 'gz_sim.launch.py')
+        ),
+        launch_arguments={'gz_args': '-r empty.sdf'}.items()
+    )
 
-    # Launch!
+    # Spawn Robot in Gazebo
+    spawn_entity = Node(
+        package='ros_gz_sim',
+        executable='create',
+        arguments=['-topic', 'robot_description', '-name', 'robotic_arm'],
+        output='screen'
+    )
+
+    # Controller Spawners
+    joint_state_broadcaster_spawner = Node(
+        package='controller_manager',
+        executable='spawner',
+        arguments=['joint_state_broadcaster'],
+    )
+
+    arm_controller_spawner = Node(
+        package='controller_manager',
+        executable='spawner',
+        arguments=['arm_controller'],
+    )
+
     return LaunchDescription([
-        DeclareLaunchArgument(
-            'use_sim_time',
-            default_value='false',
-            description='Use sim time if true'),
-
-        node_robot_state_publisher
+        gazebo,
+        node_robot_state_publisher,
+        spawn_entity,
+        joint_state_broadcaster_spawner,
+        arm_controller_spawner,
     ])
+
+
+    # # Launch!
+    # return LaunchDescription([
+    #     DeclareLaunchArgument(
+    #         'use_sim_time',
+    #         default_value='false',
+    #         description='Use sim time if true'),
+
+    #     node_robot_state_publisher
+    # ])
